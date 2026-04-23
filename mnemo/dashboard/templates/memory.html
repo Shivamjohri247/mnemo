@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Engram — {{ fact.text[:50] }}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #0d1117; color: #c9d1d9; }
+        a { color: #58a6ff; text-decoration: none; }
+        .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+        .meta-card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 12px; }
+        .meta-card label { color: #8b949e; font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+        .meta-card value { font-size: 18px; font-weight: 600; }
+        .badge { padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .Active { background: #1a7f37; color: white; }
+        .Warm { background: #9e6a03; color: white; }
+        .Cold { background: #1f6feb; color: white; }
+        .Archive { background: #6e7681; color: white; }
+        .chart-container { background: #161b22; border-radius: 8px; padding: 16px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <p><a href="/">Back to list</a></p>
+    <h1>{{ fact.text }}</h1>
+    <p>Lifecycle: <span class="badge {{ fact.lifecycle }}">{{ fact.lifecycle }}</span></p>
+
+    <div class="meta">
+        <div class="meta-card"><label>Strength</label><value>{{ "%.2f"|format(fact.strength or 0) }}</value></div>
+        <div class="meta-card"><label>Retention</label><value>{{ "%.1f"|format((fact.retention or 0) * 100) }}%</value></div>
+        <div class="meta-card"><label>Access Count</label><value>{{ fact.access_count }}</value></div>
+        <div class="meta-card"><label>Importance</label><value>{{ fact.importance }}</value></div>
+        <div class="meta-card"><label>Confirmations</label><value>{{ fact.confirmations }}</value></div>
+        <div class="meta-card"><label>Precision</label><value>{{ fact.precision_bits }}-bit</value></div>
+        <div class="meta-card"><label>Source</label><value>{{ fact.source }}</value></div>
+        <div class="meta-card"><label>Trust</label><value>{{ fact.trust_score }}</value></div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Forgetting Curve</h2>
+        <canvas id="curveChart" height="100"></canvas>
+    </div>
+
+    <script>
+        const curveData = {{ curve | tojson }};
+        const ctx = document.getElementById('curveChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: curveData.map(d => (d.hours / 24).toFixed(1) + 'd'),
+                datasets: [{
+                    label: 'Retention %',
+                    data: curveData.map(d => d.retention),
+                    borderColor: '#1a7f37',
+                    backgroundColor: 'rgba(26, 127, 55, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 0,
+                }]
+            },
+            options: {
+                scales: {
+                    y: { min: 0, max: 100, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } },
+                    x: { ticks: { color: '#8b949e', maxTicksLimit: 10 }, grid: { color: '#21262d' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    </script>
+</body>
+</html>

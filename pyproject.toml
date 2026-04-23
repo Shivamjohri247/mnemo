@@ -1,0 +1,107 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mnemo"
+version = "0.1.0"
+description = "Biologically-inspired local-first AI agent memory — Ebbinghaus forgetting, multi-channel retrieval, MCP integration"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [{ name = "Shivam Johri" }]
+keywords = [
+    "memory",
+    "ai",
+    "agent",
+    "forgetting",
+    "ebbinghaus",
+    "mcp",
+    "claude",
+    "local-first",
+    "embeddings",
+    "sqlite",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "sqlite-vec>=0.1.6",
+    "sentence-transformers>=3.0",
+    "spacy>=3.7",
+    "fastapi>=0.111",
+    "uvicorn>=0.30",
+    "httpx>=0.27",
+    "fastmcp>=0.9",
+    "apscheduler>=3.10",
+    "typer>=0.12",
+    "rich>=13.0",
+    "numpy>=1.26",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=5.0",
+    "ruff>=0.11.0",
+    "mypy>=1.10",
+    "pre-commit>=3.7",
+]
+ollama = ["httpx>=0.27"]
+all = ["mnemo[dev,ollama]"]
+
+[project.urls]
+Homepage = "https://github.com/shivamjohri/mnemo"
+Repository = "https://github.com/shivamjohri/mnemo"
+Issues = "https://github.com/shivamjohri/mnemo/issues"
+
+[project.scripts]
+mnemo = "mnemo.cli.commands:app"
+
+[tool.setuptools.packages.find]
+include = ["mnemo*"]
+
+[tool.setuptools.package-data]
+mnemo = ["dashboard/templates/*.html", "storage/schema.sql"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM"]
+ignore = ["E501", "N814"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short"
+markers = [
+    "slow: marks tests as slow",
+    "benchmark: benchmark tests",
+]
+
+[tool.coverage.run]
+source = ["mnemo"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 80

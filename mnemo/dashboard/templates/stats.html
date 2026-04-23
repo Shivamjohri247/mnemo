@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Engram — Stats</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #0d1117; color: #c9d1d9; }
+        a { color: #58a6ff; text-decoration: none; }
+        .stat-card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 20px; margin: 16px 0; text-align: center; }
+        .stat-card value { font-size: 36px; font-weight: 700; display: block; }
+        .stat-card label { color: #8b949e; font-size: 13px; text-transform: uppercase; }
+        .chart-container { background: #161b22; border-radius: 8px; padding: 16px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <p><a href="/">Back to list</a></p>
+    <h1>System Stats</h1>
+
+    <div class="stat-card">
+        <value>{{ total_memories }}</value>
+        <label>Total Memories</label>
+    </div>
+
+    <div class="chart-container">
+        <h2>Memories by Lifecycle State</h2>
+        <canvas id="lifecycleChart" height="150"></canvas>
+    </div>
+
+    <script>
+        const data = {{ lifecycle_counts | tojson }};
+        const labels = Object.keys(data);
+        const values = Object.values(data);
+        const colors = {
+            'Active': '#1a7f37',
+            'Warm': '#9e6a03',
+            'Cold': '#1f6feb',
+            'Archive': '#6e7681',
+            'Forgotten': '#da3633'
+        };
+
+        new Chart(document.getElementById('lifecycleChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: labels.map(l => colors[l] || '#6e7681'),
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } },
+                    x: { ticks: { color: '#8b949e' }, grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

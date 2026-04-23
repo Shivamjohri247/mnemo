@@ -1,0 +1,22 @@
+[
+    {"text": "This project uses FastAPI for all HTTP endpoints", "importance": 0.9, "source": "user"},
+    {"text": "We prefer PostgreSQL over MySQL", "importance": 0.8, "source": "user"},
+    {"text": "All services are containerized with Docker", "importance": 0.7, "source": "user"},
+    {"text": "The developer uses snake_case for Python variables", "importance": 0.6, "source": "observation"},
+    {"text": "Never use global state in request handlers", "importance": 0.8, "source": "user"},
+    {"text": "JWT tokens expire after 24 hours", "importance": 0.7, "source": "user"},
+    {"text": "Redis is used for session caching only", "importance": 0.6, "source": "user"},
+    {"text": "All dates stored as UTC Unix timestamps", "importance": 0.7, "source": "user"},
+    {"text": "The main branch is protected, require PR reviews", "importance": 0.5, "source": "user"},
+    {"text": "Docker Compose used for local development", "importance": 0.6, "source": "user"},
+    {"text": "We use TypeScript, not JavaScript", "importance": 0.9, "source": "user"},
+    {"text": "API responses follow the JSON:API specification", "importance": 0.7, "source": "user"},
+    {"text": "Authentication uses JWT with 24-hour expiry", "importance": 0.8, "source": "user"},
+    {"text": "The monorepo is managed with Turborepo", "importance": 0.6, "source": "user"},
+    {"text": "Python services use FastAPI, not Flask", "importance": 0.7, "source": "user"},
+    {"text": "Avoid ORM models with lazy loading", "importance": 0.6, "source": "user"},
+    {"text": "Use alembic for database migrations", "importance": 0.5, "source": "user"},
+    {"text": "Logging uses structured JSON format", "importance": 0.5, "source": "user"},
+    {"text": "Error responses include correlation IDs", "importance": 0.6, "source": "user"},
+    {"text": "Rate limiting is applied to all public endpoints", "importance": 0.5, "source": "user"}
+]

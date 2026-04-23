@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Engram — Memory List</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; background: #0d1117; color: #c9d1d9; }
+        a { color: #58a6ff; text-decoration: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #21262d; }
+        th { color: #8b949e; font-size: 12px; text-transform: uppercase; }
+        .badge { padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .Active { background: #1a7f37; color: white; }
+        .Warm { background: #9e6a03; color: white; }
+        .Cold { background: #1f6feb; color: white; }
+        .Archive { background: #6e7681; color: white; }
+        .Forgotten { background: #da3633; color: white; }
+        .retention-bar { width: 60px; height: 6px; background: #21262d; border-radius: 3px; display: inline-block; vertical-align: middle; }
+        .retention-fill { height: 100%; border-radius: 3px; background: #1a7f37; }
+        .filters { margin: 16px 0; }
+        .filters a { margin-right: 12px; padding: 4px 12px; border-radius: 6px; }
+        .filters .active { background: #1f6feb; color: white; }
+        h1 a { color: #c9d1d9; }
+    </style>
+</head>
+<body>
+    <h1><a href="/">Engram</a></h1>
+    <div class="filters">
+        <a href="/?lifecycle=all" class="{{ 'active' if lifecycle == 'all' else '' }}">All</a>
+        <a href="/?lifecycle=Active" class="{{ 'active' if lifecycle == 'Active' else '' }}">Active</a>
+        <a href="/?lifecycle=Warm" class="{{ 'active' if lifecycle == 'Warm' else '' }}">Warm</a>
+        <a href="/?lifecycle=Cold" class="{{ 'active' if lifecycle == 'Cold' else '' }}">Cold</a>
+        <a href="/?lifecycle=Archive" class="{{ 'active' if lifecycle == 'Archive' else '' }}">Archive</a>
+        <a href="/stats" style="float:right">Stats</a>
+    </div>
+    <table>
+        <tr><th>Text</th><th>Lifecycle</th><th>Retention</th><th>Accesses</th><th>Strength</th></tr>
+        {% for fact in facts %}
+        <tr>
+            <td><a href="/memory/{{ fact.id }}">{{ fact.text[:80] }}{% if fact.text|length > 80 %}...{% endif %}</a></td>
+            <td><span class="badge {{ fact.lifecycle }}">{{ fact.lifecycle }}</span></td>
+            <td>
+                <div class="retention-bar"><div class="retention-fill" style="width: {{ (fact.retention or 0) * 100 }}%"></div></div>
+                {{ "%.1f"|format((fact.retention or 0) * 100) }}%
+            </td>
+            <td>{{ fact.access_count }}</td>
+            <td>{{ "%.2f"|format(fact.strength or 0) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
